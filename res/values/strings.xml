@@ -3,8 +3,12 @@
     <string name="app_name">Object Connoisseur</string>
     <string name="settings_header">Settings</string>
     <string name="settings_explanation">Set up host and port for server</string>
-    <string name="default_host">192.168.11.4</string>
-    <string name="default_port">7890</string>
+    <string name="default_host">lakka.kapsi.fi</string>
+    <string name="default_port">61910</string>
     <string name="start_button_text">Connect!</string>
     <string name="invalid_host_or_port">Invalid host or port!</string>
+    <string name="object_flow_header">Objects</string>
+    <string name="connection_created">Connection created, starting initialization...</string>
+    <string name="connection_initialized">Connection initialized. Waiting for content!</string>
+    <string name="couldnt_connect">Couldn\'t connect!</string>
 </resources>

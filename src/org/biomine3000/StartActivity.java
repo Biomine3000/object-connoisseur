@@ -1,6 +1,7 @@
 package org.biomine3000;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +22,7 @@ public class StartActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.settings_view);
 
         populateHostAndPort();
 
@@ -35,9 +36,16 @@ public class StartActivity extends Activity {
                     return;
                 }
 
+                savePreferences();
                 Toast.makeText(StartActivity.this, mHost + ":" + mPort, 2).show();
+                startConnoisseur();
             }
         });
+    }
+
+    private void startConnoisseur() {
+        Intent intent = new Intent(this, ObjectFlowActivity.class);
+        startActivity(intent);
     }
 
     private void populateHostAndPort() {
@@ -58,9 +66,20 @@ public class StartActivity extends Activity {
         if (host != null && host.length() > 0 && port != 0) {
             mHost = host;
             mPort = port;
+
             return true;
         }
 
         return false;
+    }
+
+    private void savePreferences() {
+        SharedPreferences preferences = getSharedPreferences(CONNECTION_PREFERENCES_NAME, 0);
+        SharedPreferences.Editor e = preferences.edit();
+
+        e.putString(HOST_PREFERENCE_KEY, mHost);
+        e.putInt(PORT_PREFERENCE_KEY, mPort);
+
+        e.commit();
     }
 }
