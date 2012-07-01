@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:padding="20dip">
+    <TextView
+            android:id="@+id/settings_header"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/settings_header"
+            android:textSize="16pt"/>
+    <TextView
+            android:id="@+id/settings_explanation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_explanation"
+            android:layout_below="@id/settings_header"
+            />
+
+    <LinearLayout
+            android:id="@+id/host_port_layout"
+            android:padding="10dip"
+            android:orientation="vertical"
+            android:layout_below="@id/settings_explanation"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+
+        <EditText
+                android:id="@+id/host_input"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text="@string/default_host"
+                android:inputType="textNoSuggestions"></EditText>
+
+        <EditText
+                android:id="@+id/port_input"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text="@string/default_port"
+                android:inputType="number"></EditText>
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_button_text"
+            android:layout_below="@id/host_port_layout"/>
+</RelativeLayout>
+
