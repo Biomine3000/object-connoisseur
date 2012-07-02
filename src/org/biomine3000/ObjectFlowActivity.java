@@ -1,8 +1,12 @@
 package org.biomine3000;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import biomine3000.objects.*;
 import util.dbg.ILogger;
@@ -22,6 +26,35 @@ public class ObjectFlowActivity extends Activity implements ABBOEConnection.Busi
         setContentView(R.layout.object_flow);
     }
 
+    private void showText(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout items = (LinearLayout) findViewById(R.id.flow_layout);
+                TextView v = new TextView(ObjectFlowActivity.this);
+                v.setText(text);
+                items.addView(v, 0);
+            }
+        });
+    }
+
+    private void showImage(final ImageObject obj) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout items = (LinearLayout) findViewById(R.id.flow_layout);
+
+                if (!obj.getMetaData().getType().contains("png"))
+                    return;
+
+                ImageView v = new ImageView(ObjectFlowActivity.this);
+                v.setImageBitmap(BitmapFactory.decodeByteArray(obj.getPayload(), 0, obj.getPayload().length));
+
+                items.addView(v, 0);
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -36,13 +69,13 @@ public class ObjectFlowActivity extends Activity implements ABBOEConnection.Busi
 
     @Override
     public void handleObject(final BusinessObject obj) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(ObjectFlowActivity.this, obj.toString(), 2).show();
-            }
-        });
-
+        if (obj instanceof ImageObject) {
+            toast("Received an image...", 2);
+            showImage((ImageObject)obj);
+        } else if (obj instanceof PlainTextObject) {
+            // toast(Biomine3000Utils.formatBusinessObject(obj), 2);
+            showText(Biomine3000Utils.formatBusinessObject(obj));
+        }
     }
 
     @Override
@@ -52,7 +85,7 @@ public class ObjectFlowActivity extends Activity implements ABBOEConnection.Busi
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         connect();
     }
@@ -64,7 +97,7 @@ public class ObjectFlowActivity extends Activity implements ABBOEConnection.Busi
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e1.printStackTrace();
         }
         connect();
     }
@@ -83,31 +116,12 @@ public class ObjectFlowActivity extends Activity implements ABBOEConnection.Busi
                     0).getInt(StartActivity.PORT_PREFERENCE_KEY, new Integer(getResources().getString(R.string.default_port)));
 
             mConnection = new ABBOEConnection(parameters, new Socket(host, port), logger);
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ObjectFlowActivity.this, R.string.connection_created, 2).show();
-                }
-            });
+            toast(R.string.connection_created, 2);
 
             mConnection.init(this);
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ObjectFlowActivity.this, R.string.connection_initialized, 4).show();
-                }
-            });
-
+            toast(R.string.connection_initialized, 2);
         } catch (final IOException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ObjectFlowActivity.this, getResources().getText(R.string.couldnt_connect) + "(" + e.toString() + ":" + e.getMessage() + ")" , 4).show();
-                }
-            });
-
+            toast(e, 3);
             Log.e(TAG, "Couldn't connect!", e);
         }
     }
@@ -118,5 +132,32 @@ public class ObjectFlowActivity extends Activity implements ABBOEConnection.Busi
     private void disconnect() {
         if (mConnection != null)
             mConnection.initiateShutdown();
+    }
+
+    private void toast(final Exception e, final int secs) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ObjectFlowActivity.this, getResources().getText(R.string.couldnt_connect) + "(" + e.toString() + ":" + e.getMessage() + ")", secs).show();
+            }
+        });
+    }
+
+    private void toast(final String text, final int secs) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ObjectFlowActivity.this, text, secs).show();
+            }
+        });
+    }
+
+    private void toast(final int resourceId, final int secs) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ObjectFlowActivity.this, resourceId, secs).show();
+            }
+        });
     }
 }
