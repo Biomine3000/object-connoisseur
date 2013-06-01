@@ -1,4 +1,4 @@
-package org.biomine3000;
+package org.biomine3000.connoisseur;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StartActivity extends Activity {
-    public static final String TAG = StartActivity.class.getName();
+public class ServerSetupActivity extends Activity {
+    public static final String TAG = ServerSetupActivity.class.getName();
 
     public static final String CONNECTION_PREFERENCES_NAME = "ConnectionPreferences";
     public static final String HOST_PREFERENCE_KEY = "host";
@@ -29,15 +29,15 @@ public class StartActivity extends Activity {
         findViewById(R.id.start_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean valid = StartActivity.this.processSettings();
+                boolean valid = ServerSetupActivity.this.processSettings();
 
                 if (!valid) {
-                    Toast.makeText(StartActivity.this, R.string.invalid_host_or_port, 2).show();
+                    Toast.makeText(ServerSetupActivity.this, R.string.invalid_host_or_port, 2).show();
                     return;
                 }
 
                 savePreferences();
-                Toast.makeText(StartActivity.this, mHost + ":" + mPort, 2).show();
+                Toast.makeText(ServerSetupActivity.this, mHost + ":" + mPort, 2).show();
                 startConnoisseur();
             }
         });

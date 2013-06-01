@@ -11,4 +11,9 @@
     <string name="connection_created">Connection created, starting initialization...</string>
     <string name="connection_initialized">Connection initialized. Waiting for content!</string>
     <string name="couldnt_connect">Couldn\'t connect!</string>
+    <string name="disconnected">Disconnected!</string>
+    <string name="connection_state_unknown">Connection state unknown.</string>
+    <string name="connection_state_disconnected">Disconnected.</string>
+    <string name="connection_state_connected">Connected.</string>
+    <string name="connection_state_error">Error occurred</string>
 </resources>
