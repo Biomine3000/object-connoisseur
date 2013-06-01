@@ -68,14 +68,17 @@ public class ObjectFlowActivity extends FragmentActivity implements ObjectObserv
             mManager = new ConnectionManager();
 
         mManager.connect(host, port);
+        mManager.addObjectObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (mManager != null)
+        if (mManager != null) {
+            mManager.removeObjectObserver(this);
             mManager.disconnect();
+        }
     }
 
     private void toast(final Exception e, final int secs) {

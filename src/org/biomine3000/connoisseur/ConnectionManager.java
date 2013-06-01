@@ -111,7 +111,7 @@ public class ConnectionManager implements ABBOEConnection.BusinessObjectHandler,
     }
 
     @Override
-    public void removeObserver(ObjectObserver observer) {
+    public void removeObjectObserver(ObjectObserver observer) {
         mObjectObservers.remove(observer);
     }
 }
