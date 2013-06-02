@@ -6,4 +6,6 @@ public interface ConnectionProvider {
 
     public void addConnectionStateObserver(ConnectionStateObserver observer);
     public void removeConnectionStateObserver(ConnectionStateObserver observer);
+
+    void reconnect();
 }

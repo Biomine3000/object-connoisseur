@@ -13,6 +13,8 @@ public class ConnectionManager implements ABBOEConnection.BusinessObjectHandler,
     private HashSet<ObjectObserver> mObjectObservers = new HashSet<ObjectObserver>();
     private ABBOEConnection mConnection;
     private Exception mLastError;
+    private String mLastHost = null;
+    private int mLastPort = -1;
 
     private enum ConnectionState { UNKNOWN, CONNECTED, DISCONNECTED, ERROR };
     private ConnectionState mConnectionState = ConnectionState.UNKNOWN;
@@ -45,6 +47,9 @@ public class ConnectionManager implements ABBOEConnection.BusinessObjectHandler,
 
     @Override
     public void connect(String host, int port) {
+        mLastHost = host;
+        mLastPort = port;
+
         try {
             ClientParameters parameters = new ClientParameters(TAG, ClientReceiveMode.ALL, Subscriptions.ALL, false);
             mConnection = new ABBOEConnection(parameters, new Socket(host, port), new AndroidLoggerAdapter(TAG));
@@ -103,6 +108,11 @@ public class ConnectionManager implements ABBOEConnection.BusinessObjectHandler,
     @Override
     public void removeConnectionStateObserver(ConnectionStateObserver observer) {
         mStateObservers.remove(observer);
+    }
+
+    @Override
+    public void reconnect() {
+        connect(mLastHost, mLastPort);
     }
 
     @Override
